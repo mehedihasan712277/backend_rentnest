@@ -4,8 +4,8 @@ import cors from "cors";
 
 import config from "./config";
 
-// import { notFound } from "./middleware/notfound";
-// import { globalErrorHandler } from "./middleware/globalErrorHandler";
+import { notFound } from "./middleware/notfound";
+import { globalErrorHandler } from "./middleware/globalErrorHandler";
 
 const app: Application = express();
 
@@ -24,8 +24,7 @@ app.get("/", (req: Request, res: Response) => {
     res.send("Hello world");
 });
 
-// app.use(notFound);
-
-// app.use(globalErrorHandler);
+app.use(notFound);
+app.use(globalErrorHandler);
 
 export default app;
