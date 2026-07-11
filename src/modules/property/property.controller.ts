@@ -6,7 +6,7 @@ import { propertyService } from "./property.service";
 
 const createProperty = catchAsync(
     async (req: Request, res: Response, next: NextFunction) => {
-        const result = await propertyService.createPropertyIntoDB();
+        const result = await propertyService.createPropertyIntoDB(req.body);
         sendResponse(res, {
             success: true,
             statusCode: 200,
@@ -22,40 +22,59 @@ const getAllProperty = catchAsync(
             success: true,
             statusCode: 200,
             message: "all properties retrived successfully",
-            data: "",
+            data: result,
         });
     },
 );
 const getOneProperty = catchAsync(
     async (req: Request, res: Response, next: NextFunction) => {
-        const result = await propertyService.getOnePropertyFromDB();
+        const propertyId = req.params.propertyId;
+        if (propertyId) {
+            throw new Error("property id not provided");
+        }
+        const result = await propertyService.getOnePropertyFromDB(
+            propertyId as string,
+        );
         sendResponse(res, {
             success: true,
             statusCode: 200,
             message: "property retrived successfully",
-            data: "",
+            data: result,
         });
     },
 );
 const updateProperty = catchAsync(
     async (req: Request, res: Response, next: NextFunction) => {
-        const result = await propertyService.updatePropertyIntoDB();
+        const propertyId = req.params.propertyId;
+        if (propertyId) {
+            throw new Error("property id not provided");
+        }
+
+        const result = await propertyService.updatePropertyIntoDB(
+            propertyId as string,
+        );
         sendResponse(res, {
             success: true,
             statusCode: 200,
             message: "successfully",
-            data: "property updated successfully",
+            data: result,
         });
     },
 );
 const deleteProperty = catchAsync(
     async (req: Request, res: Response, next: NextFunction) => {
-        const result = await propertyService.deletePropertyFromDB();
+        const propertyId = req.params.propertyId;
+        if (propertyId) {
+            throw new Error("property id not provided");
+        }
+        const result = await propertyService.deletePropertyFromDB(
+            propertyId as string,
+        );
         sendResponse(res, {
             success: true,
             statusCode: 200,
             message: "propert deleted successfully",
-            data: "",
+            data: result,
         });
     },
 );

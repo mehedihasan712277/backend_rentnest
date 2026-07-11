@@ -1,4 +1,9 @@
-const createPropertyIntoDB = async () => {};
+import { prisma } from "../../lib/prisma";
+import { IPropertyPayload } from "./property.interface";
+
+const createPropertyIntoDB = async (payload: IPropertyPayload) => {
+    // const result = await prisma.property.create()
+};
 const getAllPropertyFromDB = async () => {};
 const getOnePropertyFromDB = async (propertyId: string) => {};
 const updatePropertyIntoDB = async (propertyId: string) => {};
