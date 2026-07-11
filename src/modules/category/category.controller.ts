@@ -24,7 +24,7 @@ const getAllCategories = catchAsync(
         sendResponse(res, {
             success: true,
             statusCode: httpStatus.OK,
-            message: "all categories are retrived  successfully",
+            message: "all categories retrived  successfully",
             data: result,
         });
     },
@@ -34,7 +34,7 @@ const getOneCategory = catchAsync(
     async (req: Request, res: Response, next: NextFunction) => {
         const categoryId = req.params.categoryId;
         if (!categoryId) {
-            throw new Error("Category id not provided");
+            throw new Error("category id not provided");
         }
         const result = await categoryService.getOneCategoryFromDb(
             categoryId as string,
@@ -53,7 +53,7 @@ const deleteCategory = catchAsync(
     async (req: Request, res: Response, next: NextFunction) => {
         const categoryId = req.params.categoryId;
         if (!categoryId) {
-            throw new Error("Category id not provided");
+            throw new Error("category id not provided");
         }
 
         await categoryService.deleteCategoryFromDB(categoryId as string);
