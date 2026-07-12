@@ -6,7 +6,11 @@ import { propertyService } from "./property.service";
 
 const createProperty = catchAsync(
     async (req: Request, res: Response, next: NextFunction) => {
-        const result = await propertyService.createPropertyIntoDB(req.body);
+        const landlordId = req.user?.id as string;
+        const result = await propertyService.createPropertyIntoDB(
+            req.body,
+            landlordId,
+        );
         sendResponse(res, {
             success: true,
             statusCode: 200,
@@ -15,6 +19,7 @@ const createProperty = catchAsync(
         });
     },
 );
+
 const getAllProperty = catchAsync(
     async (req: Request, res: Response, next: NextFunction) => {
         const result = await propertyService.getAllPropertyFromDB();

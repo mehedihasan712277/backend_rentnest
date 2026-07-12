@@ -21,4 +21,6 @@ model Review {
   property Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
 
   rentalRequest RentalRequest @relation(fields: [rentalRequestId], references: [id], onDelete: Cascade)
+
+  @@map("reviews")
 }

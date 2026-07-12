@@ -19,4 +19,6 @@ model Payment {
   rentalRequest RentalRequest @relation(fields: [rentalRequestId], references: [id], onDelete: Cascade)
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("payments")
 }

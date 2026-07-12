@@ -22,4 +22,6 @@ model RentalRequest {
   review       Review?
   
   @@unique([tenantId, propertyId])
+
+  @@map("rentalrequests")
 }

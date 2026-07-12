@@ -1,4 +1,4 @@
-model Category {
+model Amenity {
   id          String   @id @default(uuid())
   name        String   @unique
   description String?
@@ -8,5 +8,5 @@ model Category {
 
   properties  Property[]
 
-  @@map("categories")
+  @@map("amenities")
 }

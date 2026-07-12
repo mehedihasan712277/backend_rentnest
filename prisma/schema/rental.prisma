@@ -17,4 +17,6 @@ model Rental {
 
   @@index([tenantId])
   @@index([propertyId])
+
+  @@map("rentals")
 }

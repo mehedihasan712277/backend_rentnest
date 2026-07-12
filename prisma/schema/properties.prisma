@@ -15,7 +15,7 @@ model Property {
 
   thumbnail     String?
 
-  amenities     String[]
+  amenities     Amenity[]
 
   status        PropertyStatus @default(DRAFT)
 
@@ -26,9 +26,12 @@ model Property {
 
   category       Category @relation(fields: [categoryId], references: [id])
 
+
   rentalRequests RentalRequest[]
 
   reviews        Review[]
 
   rentals        Rental[]
+
+  @@map("properties")
 }
