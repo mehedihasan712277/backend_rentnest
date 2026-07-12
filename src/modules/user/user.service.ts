@@ -80,8 +80,42 @@ const updateMyprofileInDB = async (userId: string, payload: any) => {
 
     return updatedUser;
 };
+
+const getAllUsersFromDB = async () => {
+    const result = await prisma.user.findMany({
+        where: {
+            role: {
+                not: "ADMIN",
+            },
+        },
+        omit: {
+            password: true,
+        },
+        include: {
+            profile: true,
+            properties: true,
+            rentalRequests: true,
+        },
+    });
+    return result;
+};
+
+const deleteUserFromDB = async (userIds: string[]) => {
+    const result = await prisma.user.deleteMany({
+        where: {
+            id: {
+                in: userIds,
+            },
+        },
+    });
+
+    return result;
+};
+
 export const userService = {
     createUserIntoDB,
     getMyProfileFromDB,
     updateMyprofileInDB,
+    getAllUsersFromDB,
+    deleteUserFromDB,
 };

@@ -19,4 +19,7 @@ router.put(
     userController.updateMyprofile,
 );
 
+router.get("/all", auth(Role.ADMIN), userController.getAllUsers);
+router.delete("/", auth(Role.ADMIN), userController.deleteUsers);
+
 export const userRoutes = router;

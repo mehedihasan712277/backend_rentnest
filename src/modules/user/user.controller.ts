@@ -28,8 +28,8 @@ const getMyProfile = catchAsync(
         sendResponse(res, {
             success: true,
             statusCode: httpStatus.OK,
-            message: "User profile fetched successfully",
-            data: { profile },
+            message: "user profile retrived successfully",
+            data: profile,
         });
     },
 );
@@ -44,10 +44,42 @@ const updateMyprofile = catchAsync(
         sendResponse(res, {
             success: true,
             statusCode: httpStatus.OK,
-            message: "User profile updated successfully",
+            message: "user profile updated successfully",
             data: { updatedUser },
         });
     },
 );
 
-export const userController = { getMyProfile, updateMyprofile };
+const getAllUsers = catchAsync(
+    async (req: Request, res: Response, next: NextFunction) => {
+        const result = await userService.getAllUsersFromDB();
+
+        sendResponse(res, {
+            success: true,
+            statusCode: httpStatus.OK,
+            message: "all users retrived successfully",
+            data: result,
+        });
+    },
+);
+
+const deleteUsers = catchAsync(
+    async (req: Request, res: Response, next: NextFunction) => {
+        const payload = req.body;
+
+        const result = await userService.deleteUserFromDB(payload as string[]);
+
+        sendResponse(res, {
+            success: true,
+            statusCode: httpStatus.OK,
+            message: "user profile deleted successfully",
+            data: result,
+        });
+    },
+);
+export const userController = {
+    getMyProfile,
+    updateMyprofile,
+    getAllUsers,
+    deleteUsers,
+};
