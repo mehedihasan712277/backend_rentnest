@@ -14,6 +14,7 @@ model User {
   // Relations
 
   profile         Profile?
+  amenity         Amenity?
   properties      Property[]
   rentalRequests  RentalRequest[]
   reviews         Review[]

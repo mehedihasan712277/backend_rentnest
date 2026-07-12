@@ -2,9 +2,11 @@ model Amenity {
   id          String   @id @default(uuid())
   name        String   @unique
   description String?
+  creatorId   String   @unique
 
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+  creator User @relation(fields: [creatorId], references: [id])
 
   properties  Property[]
 
