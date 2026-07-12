@@ -8,6 +8,6 @@ export interface IPropertyPayload {
     price: number;
     area?: number;
     thumbnail?: string;
-    amenities?: string[];
-    status: PropertyStatus;
+    amenityIds: string[];
+    status?: PropertyStatus;
 }
