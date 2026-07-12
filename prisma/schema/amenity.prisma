@@ -2,7 +2,7 @@ model Amenity {
   id          String   @id @default(uuid())
   name        String   @unique
   description String?
-  creatorId   String   @unique
+  creatorId   String
 
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
