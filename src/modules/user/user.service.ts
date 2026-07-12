@@ -95,6 +95,11 @@ const getAllUsersFromDB = async () => {
             profile: true,
             properties: true,
             rentalRequests: true,
+            amenity: {
+                select: {
+                    name: true,
+                },
+            },
         },
     });
     return result;
