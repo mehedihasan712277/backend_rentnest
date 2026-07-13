@@ -88,6 +88,10 @@ const refreshToken = async (refreshToken: string) => {
 const register = async (payload: RegisterUserPayload) => {
     const { name, email, password, profilePhoto, role } = payload;
 
+    if (role === "ADMIN" && payload.key !== config.admin_registration_key) {
+        throw new Error("provide correct key to register as admin");
+    }
+
     const hashedPassword = await bcrypt.hash(
         password,
         Number(config.bcrypt_salt_rounds),

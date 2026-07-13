@@ -5,7 +5,7 @@ import { auth } from "../../middleware/auth";
 
 const router = Router();
 
-// router.post("/register", userController.registerUser);
+router.post("/create-user", auth(Role.ADMIN), userController.createUser);
 
 router.get(
     "/me",

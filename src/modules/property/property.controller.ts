@@ -1,19 +1,19 @@
 import { NextFunction, Request, Response } from "express";
 import { catchAsync } from "../../utils/catchAsync";
 import { sendResponse } from "../../utils/sendResponse";
-
 import { propertyService } from "./property.service";
+import httpStatus from "http-status";
 
 const createProperty = catchAsync(
     async (req: Request, res: Response, next: NextFunction) => {
-        const landlordId = req.user?.id as string;
+        const landlordId = req.user?.id;
         const result = await propertyService.createPropertyIntoDB(
             req.body,
-            landlordId,
+            landlordId as string,
         );
         sendResponse(res, {
             success: true,
-            statusCode: 200,
+            statusCode: httpStatus.CREATED,
             message: "properties created successfully",
             data: result,
         });
@@ -25,7 +25,7 @@ const getAllProperty = catchAsync(
         const result = await propertyService.getAllPropertyFromDB();
         sendResponse(res, {
             success: true,
-            statusCode: 200,
+            statusCode: httpStatus.OK,
             message: "all properties retrived successfully",
             data: result,
         });
@@ -34,7 +34,8 @@ const getAllProperty = catchAsync(
 const getOneProperty = catchAsync(
     async (req: Request, res: Response, next: NextFunction) => {
         const propertyId = req.params.propertyId;
-        if (propertyId) {
+        console.log(req.params);
+        if (!propertyId) {
             throw new Error("property id not provided");
         }
         const result = await propertyService.getOnePropertyFromDB(
@@ -42,7 +43,7 @@ const getOneProperty = catchAsync(
         );
         sendResponse(res, {
             success: true,
-            statusCode: 200,
+            statusCode: httpStatus.OK,
             message: "property retrived successfully",
             data: result,
         });
@@ -51,17 +52,18 @@ const getOneProperty = catchAsync(
 const updateProperty = catchAsync(
     async (req: Request, res: Response, next: NextFunction) => {
         const propertyId = req.params.propertyId;
-        if (propertyId) {
+        if (!propertyId) {
             throw new Error("property id not provided");
         }
 
         const result = await propertyService.updatePropertyIntoDB(
+            req.body,
             propertyId as string,
         );
         sendResponse(res, {
             success: true,
-            statusCode: 200,
-            message: "successfully",
+            statusCode: httpStatus.OK,
+            message: "property updated successfully",
             data: result,
         });
     },
@@ -69,7 +71,7 @@ const updateProperty = catchAsync(
 const deleteProperty = catchAsync(
     async (req: Request, res: Response, next: NextFunction) => {
         const propertyId = req.params.propertyId;
-        if (propertyId) {
+        if (!propertyId) {
             throw new Error("property id not provided");
         }
         const result = await propertyService.deletePropertyFromDB(
@@ -77,7 +79,7 @@ const deleteProperty = catchAsync(
         );
         sendResponse(res, {
             success: true,
-            statusCode: 200,
+            statusCode: httpStatus.OK,
             message: "propert deleted successfully",
             data: result,
         });
