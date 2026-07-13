@@ -65,8 +65,16 @@ const getMyProfileFromDB = async (userId: string) => {
     return user;
 };
 
-const updateMyprofileInDB = async (userId: string, payload: any) => {
+const updateMyprofileInDB = async (
+    userId: string,
+    status: ActiveStatus,
+    payload: any,
+) => {
     const { name, profilePhoto, bio } = payload;
+
+    if (status === "BLOCKED") {
+        throw new Error("you are blocked by admin");
+    }
 
     const updatedUser = await prisma.user.update({
         where: {
