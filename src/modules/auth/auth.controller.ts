@@ -16,6 +16,7 @@ const loginUser = catchAsync(
             secure: false,
             sameSite: "none",
             maxAge: 1000 * 60 * 60 * 24,
+            // maxAge: 1000 * 10,
         });
 
         res.cookie("refreshToken", refreshToken, {
@@ -45,6 +46,7 @@ const refreshToken = catchAsync(
             secure: false,
             sameSite: "none",
             maxAge: 1000 * 60 * 60 * 24,
+            // maxAge: 1000 * 10,
         });
 
         sendResponse(res, {
