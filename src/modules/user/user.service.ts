@@ -2,6 +2,7 @@ import bcrypt from "bcryptjs";
 import { prisma } from "../../lib/prisma";
 import config from "../../config";
 import { RegisterUserPayload } from "./user.interface";
+import { ActiveStatus } from "../../../generated/prisma/enums";
 
 const createUserIntoDB = async (payload: RegisterUserPayload) => {
     const { name, email, password, profilePhoto, role } = payload;
@@ -115,13 +116,13 @@ const getAllUsersFromDB = async () => {
     return result;
 };
 
-const deleteUserFromDB = async (userId: string) => {
+const handleUserInDB = async (userId: string, status: ActiveStatus) => {
     const result = await prisma.user.update({
         where: {
             id: userId,
         },
         data: {
-            status: "DELETED",
+            status,
         },
     });
 
@@ -133,5 +134,5 @@ export const userService = {
     getMyProfileFromDB,
     updateMyprofileInDB,
     getAllUsersFromDB,
-    deleteUserFromDB,
+    handleUserInDB,
 };

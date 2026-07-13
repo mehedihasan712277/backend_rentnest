@@ -20,6 +20,6 @@ router.put(
 );
 
 router.get("/all", auth(Role.ADMIN), userController.getAllUsers);
-router.put("/delete-account", auth(Role.ADMIN), userController.deleteUsers);
+router.put("/delete-account", auth(Role.ADMIN), userController.handleUser);
 
 export const userRoutes = router;

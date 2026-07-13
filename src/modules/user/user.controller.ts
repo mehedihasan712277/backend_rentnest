@@ -64,11 +64,11 @@ const getAllUsers = catchAsync(
     },
 );
 
-const deleteUsers = catchAsync(
+const handleUser = catchAsync(
     async (req: Request, res: Response, next: NextFunction) => {
-        const { id } = req.body;
+        const { id, status } = req.body;
 
-        const result = await userService.deleteUserFromDB(id as string);
+        const result = await userService.handleUserInDB(id, status);
 
         sendResponse(res, {
             success: true,
@@ -82,6 +82,6 @@ export const userController = {
     getMyProfile,
     updateMyprofile,
     getAllUsers,
-    deleteUsers,
+    handleUser,
     createUser,
 };
