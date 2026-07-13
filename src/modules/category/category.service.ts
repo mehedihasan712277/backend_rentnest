@@ -84,9 +84,44 @@ const deleteCategoryFromDB = async (categoryId: string) => {
     return null;
 };
 
+const updateCategoryIntoDB = async (
+    payload: ICategoryPayload,
+    categoryId: string,
+) => {
+    const category = await prisma.category.findUniqueOrThrow({
+        where: {
+            id: categoryId,
+        },
+        include: {
+            _count: {
+                select: {
+                    properties: true,
+                },
+            },
+        },
+    });
+
+    if (category._count.properties > 0) {
+        throw new Error("you cannot update the category as it is in use.");
+    }
+
+    const result = await prisma.category.update({
+        where: {
+            id: categoryId,
+        },
+        data: {
+            name: payload.name,
+            description: payload.description,
+        },
+    });
+
+    return result;
+};
+
 export const categoryService = {
     createCategoryIntoDB,
     getAllCategoriesFromDB,
     getOneCategoryFromDb,
     deleteCategoryFromDB,
+    updateCategoryIntoDB,
 };
