@@ -6,7 +6,11 @@ import HttpStatus from "http-status";
 
 const createAmenity = catchAsync(
     async (req: Request, res: Response, next: NextFunction) => {
-        const result = await amenityService.createAmenityIntoDB(req.body);
+        const creatorId = req.user?.id;
+        const result = await amenityService.createAmenityIntoDB({
+            ...req.body,
+            creatorId,
+        });
         sendResponse(res, {
             success: true,
             statusCode: HttpStatus.CREATED,
@@ -22,6 +26,7 @@ const getAmenity = catchAsync(
             success: true,
             statusCode: HttpStatus.OK,
             message: "all amenities retrived successfully",
+            count: result.length,
             data: result,
         });
     },

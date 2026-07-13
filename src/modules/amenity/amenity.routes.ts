@@ -11,7 +11,7 @@ router.post(
     amenityController.createAmenity,
 );
 router.get("/", amenityController.getAmenity);
-router.get("/:amenityId", amenityController.getSingleAmenity);
+router.get("/:amenityId", auth(Role.ADMIN), amenityController.getSingleAmenity);
 router.delete(
     "/:amenityId",
     auth(Role.ADMIN, Role.LANDLORD),

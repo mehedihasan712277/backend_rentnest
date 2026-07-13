@@ -11,7 +11,15 @@ const createAmenityIntoDB = async (payload: IAmenityPayload) => {
 };
 const getAmenityFromDB = async () => {
     return prisma.amenity.findMany({
+        omit: {
+            creatorId: true,
+        },
         include: {
+            properties: {
+                select: {
+                    title: true,
+                },
+            },
             _count: {
                 select: {
                     properties: true,

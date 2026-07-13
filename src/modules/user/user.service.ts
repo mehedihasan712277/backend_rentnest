@@ -53,6 +53,11 @@ const getMyProfileFromDB = async (userId: string) => {
         omit: { password: true },
         include: {
             profile: true,
+            // properties: true,
+            // amenity: true,
+            // rentalRequests: true,
+            // reviews: true,
+            // rentals: true,
         },
     });
 
@@ -103,6 +108,8 @@ const getAllUsersFromDB = async () => {
                     name: true,
                 },
             },
+            // reviews: true,
+            // payments: true,
         },
     });
     return result;
