@@ -8,18 +8,18 @@ const router = Router();
 router.post("/create-user", auth(Role.ADMIN), userController.createUser);
 
 router.get(
-    "/me",
+    "/my-profile",
     auth(Role.ADMIN, Role.TENANT, Role.LANDLORD),
     userController.getMyProfile,
 );
 
 router.put(
-    "/my-profile",
+    "/update-profile",
     auth(Role.ADMIN, Role.TENANT, Role.LANDLORD),
     userController.updateMyprofile,
 );
 
 router.get("/all", auth(Role.ADMIN), userController.getAllUsers);
-router.delete("/", auth(Role.ADMIN), userController.deleteUsers);
+router.put("/delete-account", auth(Role.ADMIN), userController.deleteUsers);
 
 export const userRoutes = router;

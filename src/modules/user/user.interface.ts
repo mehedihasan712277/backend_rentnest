@@ -6,4 +6,5 @@ export interface RegisterUserPayload {
     password: string;
     profilePhoto: string;
     role: Role;
+    key?: string;
 }

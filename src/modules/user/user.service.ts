@@ -6,6 +6,10 @@ import { RegisterUserPayload } from "./user.interface";
 const createUserIntoDB = async (payload: RegisterUserPayload) => {
     const { name, email, password, profilePhoto, role } = payload;
 
+    if (role === "ADMIN" && payload.key !== config.admin_registration_key) {
+        throw new Error("provide correct key to create admin");
+    }
+
     const hashedPassword = await bcrypt.hash(
         password,
         Number(config.bcrypt_salt_rounds),
@@ -56,7 +60,7 @@ const getMyProfileFromDB = async (userId: string) => {
 };
 
 const updateMyprofileInDB = async (userId: string, payload: any) => {
-    const { name, email, profilePhoto, bio } = payload;
+    const { name, profilePhoto, bio } = payload;
 
     const updatedUser = await prisma.user.update({
         where: {
@@ -64,7 +68,6 @@ const updateMyprofileInDB = async (userId: string, payload: any) => {
         },
         data: {
             name,
-            email,
             profile: {
                 update: {
                     profilePhoto,
@@ -105,12 +108,13 @@ const getAllUsersFromDB = async () => {
     return result;
 };
 
-const deleteUserFromDB = async (userIds: string[]) => {
-    const result = await prisma.user.deleteMany({
+const deleteUserFromDB = async (userId: string) => {
+    const result = await prisma.user.update({
         where: {
-            id: {
-                in: userIds,
-            },
+            id: userId,
+        },
+        data: {
+            status: "DELETED",
         },
     });
 

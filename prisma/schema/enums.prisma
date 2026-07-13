@@ -24,6 +24,7 @@ enum SubscriptionStatus {
 enum ActiveStatus {
   ACTIVE
   BLOCKED
+  DELETED
 }
 
 enum RentalRequestStatus {

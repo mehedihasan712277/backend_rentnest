@@ -57,6 +57,7 @@ const getAllUsers = catchAsync(
         sendResponse(res, {
             success: true,
             statusCode: httpStatus.OK,
+            count: result.length,
             message: "all users retrived successfully",
             data: result,
         });
@@ -65,9 +66,9 @@ const getAllUsers = catchAsync(
 
 const deleteUsers = catchAsync(
     async (req: Request, res: Response, next: NextFunction) => {
-        const payload = req.body;
+        const { id } = req.body;
 
-        const result = await userService.deleteUserFromDB(payload as string[]);
+        const result = await userService.deleteUserFromDB(id as string);
 
         sendResponse(res, {
             success: true,
