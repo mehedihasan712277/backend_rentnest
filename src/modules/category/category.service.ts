@@ -12,10 +12,14 @@ const createCategoryIntoDB = async (payload: ICategoryPayload) => {
 const getAllCategoriesFromDB = async () => {
     const result = await prisma.category.findMany({
         include: {
-            properties: true,
             _count: {
                 select: {
                     properties: true,
+                },
+            },
+            properties: {
+                select: {
+                    title: true,
                 },
             },
         },
@@ -30,14 +34,24 @@ const getOneCategoryFromDb = async (categoryId: string) => {
             id: categoryId,
         },
         include: {
-            properties: {
-                include: {
-                    landlord: true,
-                },
-            },
             _count: {
                 select: {
                     properties: true,
+                },
+            },
+            properties: {
+                include: {
+                    _count: {
+                        select: {
+                            reviews: true,
+                            amenities: true,
+                            rentalRequests: true,
+                        },
+                    },
+                    landlord: true,
+                    reviews: true,
+                    rentalRequests: true,
+                    amenities: true,
                 },
             },
         },
@@ -47,6 +61,21 @@ const getOneCategoryFromDb = async (categoryId: string) => {
 };
 
 const deleteCategoryFromDB = async (categoryId: string) => {
+    const category = await prisma.category.findUniqueOrThrow({
+        where: {
+            id: categoryId,
+        },
+        include: {
+            _count: {
+                select: {
+                    properties: true,
+                },
+            },
+        },
+    });
+    if (category._count.properties > 0) {
+        throw new Error("you cannot delete the category as it is in used.");
+    }
     await prisma.category.delete({
         where: {
             id: categoryId,

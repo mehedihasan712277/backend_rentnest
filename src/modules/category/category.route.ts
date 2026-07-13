@@ -7,7 +7,7 @@ const router = Router();
 
 router.post("/", auth(Role.ADMIN), categoryController.createCategory);
 router.get("/", categoryController.getAllCategories);
-router.get("/:categoryId", categoryController.getOneCategory);
+router.get("/:categoryId", auth(Role.ADMIN), categoryController.getOneCategory);
 router.delete(
     "/:categoryId",
     auth(Role.ADMIN),
