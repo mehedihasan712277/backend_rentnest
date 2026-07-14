@@ -77,6 +77,7 @@ const updateProperty = catchAsync(
         const result = await propertyService.updatePropertyIntoDB(
             req.body,
             propertyId as string,
+            req.user?.id as string,
         );
         sendResponse(res, {
             success: true,

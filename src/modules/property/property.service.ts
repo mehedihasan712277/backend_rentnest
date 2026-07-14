@@ -42,6 +42,11 @@ const getAllPropertyFromDB = async () => {
                     description: true,
                 },
             },
+            category: {
+                select: {
+                    name: true,
+                },
+            },
         },
     });
     return result;
@@ -89,7 +94,29 @@ const getOnePropertyFromDB = async (propertyId: string) => {
 const updatePropertyIntoDB = async (
     payload: IPropertyPayload,
     propertyId: string,
+    userId: string,
 ) => {
+    const property = await prisma.property.findUniqueOrThrow({
+        where: {
+            id: propertyId,
+        },
+        include: {
+            rentals: true,
+        },
+    });
+
+    if (property.landlordId !== userId) {
+        throw new Error(
+            "you cannot edit it as you dont own it. Only its landord is allowed to edit",
+        );
+    }
+
+    if (property.rentals.length > 0) {
+        throw new Error(
+            "the property is in used by tenant so you cannot change it now",
+        );
+    }
+
     const result = await prisma.property.update({
         where: {
             id: propertyId,
@@ -105,7 +132,7 @@ const updatePropertyIntoDB = async (
             thumbnail: payload.thumbnail,
             status: payload.status,
             amenities: {
-                set: payload.amenityIds.map((id) => ({ id })),
+                set: payload.amenityIds?.map((id) => ({ id })),
             },
         },
         include: {
