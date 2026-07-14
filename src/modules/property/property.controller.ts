@@ -3,6 +3,7 @@ import { catchAsync } from "../../utils/catchAsync";
 import { sendResponse } from "../../utils/sendResponse";
 import { propertyService } from "./property.service";
 import httpStatus from "http-status";
+import { Role } from "../../../generated/prisma/enums";
 
 const createProperty = catchAsync(
     async (req: Request, res: Response, next: NextFunction) => {
@@ -26,11 +27,28 @@ const getAllProperty = catchAsync(
         sendResponse(res, {
             success: true,
             statusCode: httpStatus.OK,
+            count: result.length,
             message: "all properties retrived successfully",
             data: result,
         });
     },
 );
+
+const getMyOwnPropertyList = catchAsync(
+    async (req: Request, res: Response, next: NextFunction) => {
+        const result = await propertyService.getMyOwnPropertyListFromDB(
+            req.user?.id as string,
+        );
+        sendResponse(res, {
+            success: true,
+            statusCode: httpStatus.OK,
+            count: result.length,
+            message: "my properties retrived successfully",
+            data: result,
+        });
+    },
+);
+
 const getOneProperty = catchAsync(
     async (req: Request, res: Response, next: NextFunction) => {
         const propertyId = req.params.propertyId;
@@ -76,11 +94,13 @@ const deleteProperty = catchAsync(
         }
         const result = await propertyService.deletePropertyFromDB(
             propertyId as string,
+            req.user?.id as string,
+            req.user?.role as Role,
         );
         sendResponse(res, {
             success: true,
             statusCode: httpStatus.OK,
-            message: "propert deleted successfully",
+            message: "property deleted successfully",
             data: result,
         });
     },
@@ -89,6 +109,7 @@ const deleteProperty = catchAsync(
 export const propertyController = {
     createProperty,
     getAllProperty,
+    getMyOwnPropertyList,
     getOneProperty,
     updateProperty,
     deleteProperty,

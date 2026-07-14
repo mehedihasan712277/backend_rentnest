@@ -1,3 +1,4 @@
+import { Role } from "../../../generated/prisma/enums";
 import { prisma } from "../../lib/prisma";
 import { IPropertyPayload } from "./property.interface";
 
@@ -21,11 +22,6 @@ const createPropertyIntoDB = async (
                 connect: payload.amenityIds.map((id) => ({ id })),
             },
         },
-        // include: {
-        //     landlord: true,
-        //     category: true,
-        //     amenities: true,
-        // },
     });
 
     return result;
@@ -34,10 +30,27 @@ const createPropertyIntoDB = async (
 const getAllPropertyFromDB = async () => {
     const result = await prisma.property.findMany({
         include: {
-            rentalRequests: true,
             reviews: true,
-            landlord: true,
-            amenities: true,
+            landlord: {
+                select: {
+                    name: true,
+                },
+            },
+            amenities: {
+                select: {
+                    name: true,
+                    description: true,
+                },
+            },
+        },
+    });
+    return result;
+};
+
+const getMyOwnPropertyListFromDB = async (creatorId: string) => {
+    const result = await prisma.property.findMany({
+        where: {
+            landlordId: creatorId,
         },
     });
     return result;
@@ -92,8 +105,12 @@ const updatePropertyIntoDB = async (
     return result;
 };
 
-const deletePropertyFromDB = async (propertyId: string) => {
-    const rental = await prisma.property.findUniqueOrThrow({
+const deletePropertyFromDB = async (
+    propertyId: string,
+    userId: string,
+    role: Role,
+) => {
+    const property = await prisma.property.findUniqueOrThrow({
         where: {
             id: propertyId,
         },
@@ -102,22 +119,27 @@ const deletePropertyFromDB = async (propertyId: string) => {
         },
     });
 
-    if (rental.rentals.length > 0) {
+    if (role !== "ADMIN" && property.landlordId !== userId) {
+        throw new Error(
+            "you cannot delete it as you dont own it. Only admin and its landord are allowed to delete",
+        );
+    }
+
+    if (property.rentals.length > 0) {
         throw new Error("the property is in used by tenant");
     }
 
-    const result = await prisma.property.delete({
+    await prisma.property.delete({
         where: {
             id: propertyId,
         },
     });
-
-    return result;
 };
 
 export const propertyService = {
     createPropertyIntoDB,
     getAllPropertyFromDB,
+    getMyOwnPropertyListFromDB,
     getOnePropertyFromDB,
     updatePropertyIntoDB,
     deletePropertyFromDB,

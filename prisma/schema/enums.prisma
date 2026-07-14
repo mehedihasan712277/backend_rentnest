@@ -35,6 +35,6 @@ enum RentalRequestStatus {
 }
 
 enum PropertyStatus {
-  DRAFT
-  PUBLISHED
+  AVAILABLE
+  NOTAVAILABLE
 }
