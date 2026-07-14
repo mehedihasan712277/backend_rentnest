@@ -62,10 +62,23 @@ const getOnePropertyFromDB = async (propertyId: string) => {
             id: propertyId,
         },
         include: {
-            landlord: true,
-            category: true,
-            amenities: true,
-            rentalRequests: true,
+            landlord: {
+                select: {
+                    name: true,
+                },
+            },
+            category: {
+                select: {
+                    name: true,
+                    description: true,
+                },
+            },
+            amenities: {
+                select: {
+                    name: true,
+                    description: true,
+                },
+            },
             reviews: true,
         },
     });
