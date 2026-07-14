@@ -90,15 +90,53 @@ const updatePropertyIntoDB = async (
             price: payload.price,
             area: payload.area,
             thumbnail: payload.thumbnail,
-
+            status: payload.status,
             amenities: {
                 set: payload.amenityIds.map((id) => ({ id })),
             },
         },
         include: {
-            landlord: true,
             category: true,
             amenities: true,
+        },
+    });
+
+    return result;
+};
+
+const togglePropertyStatusIntoDB = async (
+    propertyId: string,
+    role: Role,
+    userId: string,
+) => {
+    // Check if property exists
+    const property = await prisma.property.findUniqueOrThrow({
+        where: {
+            id: propertyId,
+        },
+        select: {
+            status: true,
+            landlordId: true,
+        },
+    });
+
+    if (role !== "ADMIN" && property.landlordId !== userId) {
+        throw new Error(
+            "you cannot change it as you dont own it. Only admin and its landord are allowed to change status",
+        );
+    }
+
+    const result = await prisma.property.update({
+        where: {
+            id: propertyId,
+        },
+        data: {
+            status:
+                property.status === "AVAILABLE" ? "NOTAVAILABLE" : "AVAILABLE",
+        },
+        select: {
+            title: true,
+            status: true,
         },
     });
 
@@ -142,5 +180,6 @@ export const propertyService = {
     getMyOwnPropertyListFromDB,
     getOnePropertyFromDB,
     updatePropertyIntoDB,
+    togglePropertyStatusIntoDB,
     deletePropertyFromDB,
 };

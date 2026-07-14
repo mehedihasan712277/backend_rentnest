@@ -86,6 +86,28 @@ const updateProperty = catchAsync(
         });
     },
 );
+
+const togglePropertyStatus = catchAsync(
+    async (req: Request, res: Response, next: NextFunction) => {
+        const propertyId = req.params.propertyId;
+        if (!propertyId) {
+            throw new Error("property id not provided");
+        }
+
+        const result = await propertyService.togglePropertyStatusIntoDB(
+            propertyId as string,
+            req.user?.role as Role,
+            req.user?.id as string,
+        );
+        sendResponse(res, {
+            success: true,
+            statusCode: httpStatus.OK,
+            message: "property status changed successfully",
+            data: result,
+        });
+    },
+);
+
 const deleteProperty = catchAsync(
     async (req: Request, res: Response, next: NextFunction) => {
         const propertyId = req.params.propertyId;
@@ -112,5 +134,6 @@ export const propertyController = {
     getMyOwnPropertyList,
     getOneProperty,
     updateProperty,
+    togglePropertyStatus,
     deleteProperty,
 };
