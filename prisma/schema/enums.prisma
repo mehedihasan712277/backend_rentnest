@@ -1,12 +1,12 @@
 enum Role {
-    TENANT
-    LANDLORD
-    ADMIN
+  TENANT
+  LANDLORD
+  ADMIN
 }
 
 enum ReviewStatus {
-    APPROVED
-    CANCELED
+  APPROVED
+  CANCELED
 }
 
 enum PaymentStatus {
@@ -28,10 +28,10 @@ enum ActiveStatus {
 }
 
 enum RentalRequestStatus {
-    PENDING
-    APPROVED
-    REJECTED
-    COMPLETED
+  PENDING
+  APPROVED
+  REJECTED
+  COMPLETED
 }
 
 enum PropertyStatus {
