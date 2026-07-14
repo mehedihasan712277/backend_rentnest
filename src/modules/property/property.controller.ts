@@ -52,7 +52,6 @@ const getMyOwnPropertyList = catchAsync(
 const getOneProperty = catchAsync(
     async (req: Request, res: Response, next: NextFunction) => {
         const propertyId = req.params.propertyId;
-        console.log(req.params);
         if (!propertyId) {
             throw new Error("property id not provided");
         }

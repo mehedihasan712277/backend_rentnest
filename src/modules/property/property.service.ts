@@ -57,6 +57,17 @@ const getMyOwnPropertyListFromDB = async (creatorId: string) => {
         where: {
             landlordId: creatorId,
         },
+        include: {
+            amenities: {
+                select: {
+                    name: true,
+                    description: true,
+                },
+            },
+            rentalRequests: true,
+            reviews: true,
+            rentals: true,
+        },
     });
     return result;
 };
