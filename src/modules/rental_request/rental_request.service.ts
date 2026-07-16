@@ -6,6 +6,13 @@ const createRequestIntoDB = async (payload: IRentalRequestPayload) => {
         where: {
             id: payload.propertyId,
         },
+        include: {
+            rentalRequests: {
+                select: {
+                    tenantId: true,
+                },
+            },
+        },
     });
 
     if (property.landlordId === payload.tenantId) {
@@ -15,6 +22,17 @@ const createRequestIntoDB = async (payload: IRentalRequestPayload) => {
     if (property.status === "NOTAVAILABLE") {
         throw new Error("the property is not available anymore");
     }
+
+    const alreadyRequested = property.rentalRequests.some(
+        (request) => request.tenantId === payload.tenantId,
+    );
+
+    if (alreadyRequested) {
+        throw new Error(
+            "You have already submitted a rental request for this property.",
+        );
+    }
+
     const result = await prisma.rentalRequest.create({
         data: payload,
     });
