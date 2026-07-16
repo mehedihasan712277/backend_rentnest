@@ -60,11 +60,15 @@ const getMySentRequest = catchAsync(
 
 const getRentalRequestToMyProperty = catchAsync(
     async (req: Request, res: Response, next: NextFunction) => {
+        const result =
+            await rentalRequestServices.getRentalRequestToMyPropertyFromDB(
+                req.user?.id as string,
+            );
         sendResponse(res, {
             success: true,
             statusCode: 200,
-            message: "successfully",
-            data: {},
+            message: "rental request to my properties retrived successfully",
+            data: result,
         });
     },
 );
