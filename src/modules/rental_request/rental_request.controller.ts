@@ -41,6 +41,28 @@ const getSingleRequest = catchAsync(
     },
 );
 
+const getMySentRequest = catchAsync(
+    async (req: Request, res: Response, next: NextFunction) => {
+        sendResponse(res, {
+            success: true,
+            statusCode: 200,
+            message: "successfully",
+            data: {},
+        });
+    },
+);
+
+const getRentalRequestToMyProperty = catchAsync(
+    async (req: Request, res: Response, next: NextFunction) => {
+        sendResponse(res, {
+            success: true,
+            statusCode: 200,
+            message: "successfully",
+            data: {},
+        });
+    },
+);
+
 const updateRequestStatus = catchAsync(
     async (req: Request, res: Response, next: NextFunction) => {
         sendResponse(res, {
@@ -67,6 +89,8 @@ export const rentalRequestController = {
     createRequest,
     getAllRequests,
     getSingleRequest,
+    getMySentRequest,
+    getRentalRequestToMyProperty,
     updateRequestStatus,
     deleteRequest,
 };

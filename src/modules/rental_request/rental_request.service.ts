@@ -25,6 +25,10 @@ const getAllRequestsFromDB = async () => {};
 
 const getSingleRequestFromDB = async () => {};
 
+const getMySentRequestFromDB = async () => {};
+
+const getRentalRequestToMyPropertyFromDB = async () => {};
+
 const updateRequestStatusIntoDB = async () => {};
 
 const deleteRequestFromDB = async () => {};
@@ -33,6 +37,8 @@ export const rentalRequestServices = {
     createRequestIntoDB,
     getAllRequestsFromDB,
     getSingleRequestFromDB,
+    getMySentRequestFromDB,
+    getRentalRequestToMyPropertyFromDB,
     updateRequestStatusIntoDB,
     deleteRequestFromDB,
 };
