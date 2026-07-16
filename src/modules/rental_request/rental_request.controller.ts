@@ -45,11 +45,15 @@ const getSingleRequest = catchAsync(
 
 const getMySentRequest = catchAsync(
     async (req: Request, res: Response, next: NextFunction) => {
+        const result = await rentalRequestServices.getMySentRequestFromDB(
+            req.user?.id as string,
+        );
         sendResponse(res, {
             success: true,
             statusCode: 200,
-            message: "successfully",
-            data: {},
+            count: result.length,
+            message: "my sent requests retrived successfully",
+            data: result,
         });
     },
 );

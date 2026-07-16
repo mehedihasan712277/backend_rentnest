@@ -8,11 +8,6 @@ const router = Router();
 router.post("/", auth(Role.TENANT), rentalRequestController.createRequest);
 router.get("/", auth(Role.ADMIN), rentalRequestController.getAllRequests);
 router.get(
-    "/:requestId",
-    auth(Role.ADMIN, Role.LANDLORD),
-    rentalRequestController.getSingleRequest,
-);
-router.get(
     "/my-sent-request",
     auth(Role.TENANT),
     rentalRequestController.getMySentRequest,
@@ -21,6 +16,11 @@ router.get(
     "/rental-request-to-me",
     auth(Role.LANDLORD),
     rentalRequestController.getRentalRequestToMyProperty,
+);
+router.get(
+    "/:requestId",
+    auth(Role.ADMIN, Role.LANDLORD),
+    rentalRequestController.getSingleRequest,
 );
 router.put(
     "/:requestId",
