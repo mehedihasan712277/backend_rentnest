@@ -66,7 +66,7 @@ const getRentalRequestToMyProperty = catchAsync(
             );
         sendResponse(res, {
             success: true,
-            statusCode: 200,
+            statusCode: HttpStatus.OK,
             message: "rental request to my properties retrived successfully",
             data: result,
         });
@@ -75,22 +75,42 @@ const getRentalRequestToMyProperty = catchAsync(
 
 const updateRequestStatus = catchAsync(
     async (req: Request, res: Response, next: NextFunction) => {
+        const id = req.params.requestId;
+
+        if (!id) {
+            throw new Error("rental request id not provided");
+        }
+
+        const result = await rentalRequestServices.updateRequestStatusIntoDB(
+            id as string,
+            req.body,
+        );
         sendResponse(res, {
             success: true,
-            statusCode: 200,
+            statusCode: HttpStatus.OK,
             message: "request status updated successfully",
-            data: {},
+            data: result,
         });
     },
 );
 
 const deleteRequest = catchAsync(
     async (req: Request, res: Response, next: NextFunction) => {
+        const rentalrequestId = req.params.requestId;
+
+        if (!rentalrequestId) {
+            throw new Error("id not provided");
+        }
+
+        await rentalRequestServices.deleteRequestFromDB(
+            rentalrequestId as string,
+            req.user?.id as string,
+        );
         sendResponse(res, {
             success: true,
-            statusCode: 200,
+            statusCode: HttpStatus.OK,
             message: "request deleted successfully",
-            data: {},
+            data: null,
         });
     },
 );

@@ -17,11 +17,11 @@ router.get(
     auth(Role.LANDLORD),
     rentalRequestController.getRentalRequestToMyProperty,
 );
-router.get(
-    "/:requestId",
-    auth(Role.ADMIN, Role.LANDLORD),
-    rentalRequestController.getSingleRequest,
-);
+// router.get(
+//     "/:requestId",
+//     auth(Role.ADMIN, Role.LANDLORD),
+//     rentalRequestController.getSingleRequest,
+// );
 router.put(
     "/:requestId",
     auth(Role.LANDLORD),

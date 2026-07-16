@@ -1,3 +1,4 @@
+import { RentalRequestStatus } from "../../../generated/prisma/enums";
 import { prisma } from "../../lib/prisma";
 import { IRentalRequestPayload } from "./rental_request.interface";
 
@@ -116,9 +117,43 @@ const getRentalRequestToMyPropertyFromDB = async (landlordId: string) => {
     return result;
 };
 
-const updateRequestStatusIntoDB = async () => {};
+const updateRequestStatusIntoDB = async (
+    rentalrequestId: string,
+    payload: { status: RentalRequestStatus },
+) => {
+    const result = await prisma.rentalRequest.update({
+        where: {
+            id: rentalrequestId,
+        },
+        data: {
+            status: payload.status,
+        },
+    });
 
-const deleteRequestFromDB = async () => {};
+    return result;
+};
+
+const deleteRequestFromDB = async (
+    rentalrequestId: string,
+    tenantId: string,
+) => {
+    const rental_request = await prisma.rentalRequest.findUniqueOrThrow({
+        where: {
+            id: rentalrequestId,
+        },
+    });
+
+    if (rental_request.tenantId !== tenantId) {
+        throw new Error("you cannot delete others' rental request");
+    }
+
+    await prisma.rentalRequest.delete({
+        where: {
+            id: rentalrequestId,
+        },
+    });
+    return null;
+};
 
 export const rentalRequestServices = {
     createRequestIntoDB,
