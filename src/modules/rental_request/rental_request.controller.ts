@@ -21,11 +21,13 @@ const createRequest = catchAsync(
 
 const getAllRequests = catchAsync(
     async (req: Request, res: Response, next: NextFunction) => {
+        const result = await rentalRequestServices.getAllRequestsFromDB();
         sendResponse(res, {
             success: true,
             statusCode: HttpStatus.OK,
+            count: result.length,
             message: "all requests retrived successfully",
-            data: {},
+            data: result,
         });
     },
 );
