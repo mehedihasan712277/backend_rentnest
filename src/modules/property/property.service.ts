@@ -186,7 +186,7 @@ const updatePropertyIntoDB = async (
             id: propertyId,
         },
         include: {
-            rentals: true,
+            rental: true,
         },
     });
 
@@ -196,7 +196,7 @@ const updatePropertyIntoDB = async (
         );
     }
 
-    if (property.rentals.length > 0) {
+    if (property.rental) {
         throw new Error(
             "the property is in used by tenant so you cannot change it now",
         );
@@ -278,7 +278,7 @@ const deletePropertyFromDB = async (
             id: propertyId,
         },
         include: {
-            rentals: true,
+            rental: true,
         },
     });
 
@@ -288,7 +288,7 @@ const deletePropertyFromDB = async (
         );
     }
 
-    if (property.rentals.length > 0) {
+    if (property.rental) {
         throw new Error("the property is in used by tenant");
     }
 
