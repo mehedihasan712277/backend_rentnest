@@ -23,7 +23,8 @@ const createProperty = catchAsync(
 
 const getAllProperty = catchAsync(
     async (req: Request, res: Response, next: NextFunction) => {
-        const result = await propertyService.getAllPropertyFromDB();
+        const query = req.query;
+        const result = await propertyService.getAllPropertyFromDB(query);
         sendResponse(res, {
             success: true,
             statusCode: httpStatus.OK,

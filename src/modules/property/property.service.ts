@@ -1,6 +1,7 @@
 import { Role } from "../../../generated/prisma/enums";
+import { PropertyWhereInput } from "../../../generated/prisma/models";
 import { prisma } from "../../lib/prisma";
-import { IPropertyPayload } from "./property.interface";
+import { IPropertyPayload, IPropertyQuery } from "./property.interface";
 
 const createPropertyIntoDB = async (
     payload: IPropertyPayload,
@@ -27,8 +28,80 @@ const createPropertyIntoDB = async (
     return result;
 };
 
-const getAllPropertyFromDB = async () => {
+const getAllPropertyFromDB = async (query: IPropertyQuery) => {
+    const limit = query.limit ? Number(query.limit) : 10;
+    const page = query.page ? Number(query.page) : 1;
+    const skip = (page - 1) * limit;
+    const sortBy = query.sortBy ? query.sortBy : "createdAt";
+    const sortOrder = query.sortOrder ? query.sortOrder : "desc";
+
+    const andCondition: PropertyWhereInput[] = [];
+    const amenities = query.amenities
+        ? JSON.parse(query.amenities as string)
+        : null;
+    const amenitiesArray = Array.isArray(amenities) ? amenities : [];
+
+    if (query.searchTerm) {
+        andCondition.push({
+            OR: [
+                {
+                    title: {
+                        contains: query.searchTerm,
+                        mode: "insensitive",
+                    },
+                },
+                {
+                    description: {
+                        contains: query.searchTerm,
+                        mode: "insensitive",
+                    },
+                },
+            ],
+        });
+    }
+    if (query.categoryId) {
+        andCondition.push({
+            categoryId: query.categoryId,
+        });
+    }
+
+    if (query.location) {
+        andCondition.push({
+            location: query.location,
+        });
+    }
+
+    if (query.amenities) {
+        andCondition.push({
+            amenities: {
+                some: {
+                    id: {
+                        in: amenitiesArray,
+                    },
+                },
+            },
+        });
+    }
+
+    // price range filtering
+    if (query.minPrice || query.maxPrice) {
+        andCondition.push({
+            price: {
+                ...(query.minPrice && { gte: Number(query.minPrice) }),
+                ...(query.maxPrice && { lte: Number(query.maxPrice) }),
+            },
+        });
+    }
+
     const result = await prisma.property.findMany({
+        where: {
+            AND: andCondition,
+        },
+        take: limit,
+        skip: skip,
+        orderBy: {
+            [sortBy]: sortOrder,
+        },
         include: {
             reviews: true,
             landlord: {
@@ -38,6 +111,7 @@ const getAllPropertyFromDB = async () => {
             },
             amenities: {
                 select: {
+                    id: true,
                     name: true,
                     description: true,
                 },
